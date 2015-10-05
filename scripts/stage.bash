@@ -8,13 +8,13 @@
 # Edit the file supplied as an argument to this script.
 #
 # The script ensures that edits are pushed to the development 
-# branch at the origin before checking out dev to merge
-# the edits previously made into dev. The script then pushes
-# the merge into the dev branch back at the origin.
+# branch at the origin before checking out staging to merge
+# the edits previously made into staging. The script then pushes
+# the merge into the staging branch back at the origin.
 #
-# After pushing the merge to dev at the origin we are ready to
+# After pushing the merge to staging at the origin we are ready to
 # deploy to Heroku. Consequently the script lets git know about the
-# dev Heroku app for the domain and identifies it as "dev-
+# staging Heroku app for the domain and identifies it as "staging-
 # heroku". Then the push is made.
 #
 git remote remove origin
@@ -28,20 +28,20 @@ fi
 git commit -m "$2"
 git push origin development
 [ $3 == "noprompting" ] || while true; do
-    read -p "shall we push changes to the dev GitHub repository and the dev instance on Heroku? " yn
+    read -p "shall we push changes to the staging GitHub repository and the staging instance on Heroku? " yn
     case $yn in
         [Yy]* ) echo "proceeding..."; break;;
         [Nn]* ) exit;;
         * ) echo "please answer yes or no.";;
     esac
 done
-git checkout dev || git checkout -b dev
+git checkout staging || git checkout -b staging
 git merge development
-git push origin dev
+git push origin staging
 cat ~/.netrc | grep heroku || heroku login && heroku keys:add ~/.ssh/id_rsa.pub
-heroku apps:destroy dev-networkresilience-com --confirm dev-networkresilience-com
-heroku apps:create dev-networkresilience-com
-heroku domains:add dev.networkresilience.com --app dev-networkresilience-com
-heroku git:remote -a dev-networkresilience-com -r dev-heroku
-git push dev-heroku dev:master
+heroku apps:destroy staging-networkresilience-com --confirm staging-networkresilience-com
+heroku apps:create staging-networkresilience-com
+heroku domains:add staging.networkresilience.com --app staging-networkresilience-com
+heroku git:remote -a staging-networkresilience-com -r staging-heroku
+git push staging-heroku staging:master
 git checkout development

@@ -8,7 +8,7 @@
 # on Heroku. 
 #
 # git remote rm origin
-# git remote add origin https://github.com/networkresilience/engineering-networkresilience-com.git
+# git remote add origin https://github.com/munair/engineering-networkresilience-com.git
 
 git init
 if [ $1 == "ALL" ] ; then
